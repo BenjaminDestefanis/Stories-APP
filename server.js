@@ -1,18 +1,27 @@
 const express = require('express');
 const app = express();
 const path = require('path')
+const cors = require('cors')
 
 const { logger } = require('./middleware/logger')
+const errorHandler = require('./middleware/errorHandler')
+const cookieParser = require('cookie-parser')
+const corsOptions = require('./config/corsOptions')
 
 //PORT
 const PORT = process.env.PORT || 3000;
 
+//Middlewares
+
 app.use(logger)
 
+//los cors son para que configuremos desde que sitios pueden acceder a nuestra API a traves de la consola del navegador
+app.use(cors(corsOptions))
 app.use(express.json())//para que nuestra app pueda entender json
+app.use(cookieParser())// captura cokies
 
 
-//Middleware
+
 app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
 
@@ -29,6 +38,8 @@ app.all('*', (req, res) => {
         res.type('txt').send('404 not found')
     }
 })
+
+app.use(errorHandler)
 
 
 //Server listen
