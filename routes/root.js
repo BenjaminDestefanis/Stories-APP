@@ -4,7 +4,7 @@ const path = require('path');
 
 
 //Firt Route
-
+//Esta ruta sirve para obtener el index.html
 router.get('^/$|/index(.html)?', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'index.html'))
 })
