@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config() //Todas las variables gobales
 
 const express = require('express');
 const app = express();
@@ -12,6 +12,7 @@ const corsOptions = require('./config/corsOptions')
 
 
 console.log(process.env.NODE_ENV)
+console.log(process.env.DATABASE_URI)
 //PORT
 const PORT = process.env.PORT || 3000;
 
