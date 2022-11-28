@@ -9,10 +9,15 @@ const { logger } = require('./middleware/logger')
 const errorHandler = require('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
 const corsOptions = require('./config/corsOptions')
+const connectDB = require('./config/dbConnect')
+const mongoose = require('mongoose')
+const { logEvents } = require('./middleware/logger')
 
 
-console.log(process.env.NODE_ENV)
-console.log(process.env.DATABASE_URI)
+
+connectDB()
+
+
 //PORT
 const PORT = process.env.PORT || 3000;
 
@@ -48,4 +53,13 @@ app.use(errorHandler)
 
 
 //Server listen
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB')
+    app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+})
+
+mongoose.connection.on('error', err => {
+    console.log(err)
+    logEvents(`${err.no}: ${err.code}\t ${err.syscall}\t ${err.hostname}`, 'mongoErrLog.log')
+})
