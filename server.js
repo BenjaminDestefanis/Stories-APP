@@ -24,16 +24,14 @@ const PORT = process.env.PORT || 3000;
 //Middlewares
 
 app.use(logger)
-
 //los cors son para que configuremos desde que sitios pueden acceder a nuestra API a traves de la consola del navegador
 app.use(cors(corsOptions))
 app.use(express.json())//para que nuestra app pueda entender json
 app.use(cookieParser())// captura cokies
-
-
-
 app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
+
+app.use('/users', require('./routes/userRoutes'))
 
 
 //Si la ruta no conincide con las anteriores , aplicaremos el estado 404
